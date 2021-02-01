@@ -1,9 +1,10 @@
 import Appointment from '../models/Appointment'
-import { startOfHour, parseISO, isBefore, format } from 'date-fns'
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns'
 import * as Yup from 'yup'
 import User from '../models/User'
 import File from '../models/File'
 import Notification from '../schemas/Notification'
+import CancellationMail from '../jobs/CancellationMail'
 
 class AppointmentController {
     async index(req, res) {
@@ -120,7 +121,7 @@ class AppointmentController {
                     attributes: ['id', 'name'],
                 },
             ],
-        });
+        })
 
         if (appointment.user_id !== req.userId) {
             return res.status(401).json({
